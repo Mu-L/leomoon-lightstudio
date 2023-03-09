@@ -29,10 +29,6 @@ class LLS_PT_Studio(bpy.types.Panel):
         sub.operator('scene.switch_to_renderer', text="EEVEE", depress=context.scene.render.engine == 'BLENDER_EEVEE').engine='BLENDER_EEVEE'
         col.operator('scene.set_light_studio_background')
         col.operator('lls.render_lights_exr')
-        col.label(text="Camera Visibility")
-        sub = col.row(align=True)
-        sub.operator('lls.camera_toggle_all_lights', text='In Camera').visible_camera = True
-        sub.operator('lls.camera_toggle_all_lights', text='Hidden').visible_camera = False
 
 @force_register
 class LLS_PT_Mode(bpy.types.Panel):
@@ -225,6 +221,10 @@ class LLS_PT_Misc(bpy.types.Panel):
         if context.scene.keying_sets.active and context.scene.keying_sets.active.bl_idname == "BUILTIN_KSI_LightStudio":
             box = layout.box()
             box.label(text="Keying Set is active.", icon='CHECKMARK')
+        col.label(text="Light Visibility in Camera")
+        sub = col.row(align=True)
+        sub.operator('lls.camera_toggle_all_lights', text='Visible').visible_camera = True
+        sub.operator('lls.camera_toggle_all_lights', text='Hidden').visible_camera = False
 
 class LLSKeyingSet(bpy.types.Operator):
     bl_idname = "lls.lls_keyingset"
