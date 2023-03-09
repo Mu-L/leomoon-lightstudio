@@ -24,8 +24,11 @@ class LLS_PT_Studio(bpy.types.Panel):
         if context.scene.LLStudio.initialized: col.operator('scene.delete_leomoon_light_studio')
         col.separator()
         col.operator('light_studio.control_panel', icon='MENU_PANEL')
-        col.operator('scene.switch_to_cycles')
+        sub = col.row(align=True)
+        sub.operator('scene.switch_to_renderer', text="Cycles", depress=context.scene.render.engine == 'CYCLES').engine='CYCLES'
+        sub.operator('scene.switch_to_renderer', text="EEVEE", depress=context.scene.render.engine == 'BLENDER_EEVEE').engine='BLENDER_EEVEE'
         col.operator('scene.set_light_studio_background')
+        col.operator('lls.render_lights_exr')
 
 @force_register
 class LLS_PT_Mode(bpy.types.Panel):
@@ -218,6 +221,10 @@ class LLS_PT_Misc(bpy.types.Panel):
         if context.scene.keying_sets.active and context.scene.keying_sets.active.bl_idname == "BUILTIN_KSI_LightStudio":
             box = layout.box()
             box.label(text="Keying Set is active.", icon='CHECKMARK')
+        col.label(text="Light Visibility in Camera")
+        sub = col.row(align=True)
+        sub.operator('lls.camera_toggle_all_lights', text='Visible').visible_camera = True
+        sub.operator('lls.camera_toggle_all_lights', text='Hidden').visible_camera = False
 
 class LLSKeyingSet(bpy.types.Operator):
     bl_idname = "lls.lls_keyingset"
